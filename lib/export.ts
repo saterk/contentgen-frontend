@@ -1,7 +1,7 @@
 // Copy / download helpers for a generated piece (image + brief).
 
 import { toPng } from "html-to-image";
-import { imageUrl } from "./api";
+import { getImageBlob, imageUrl } from "./api";
 import type { ImageInfo, Item } from "./types";
 
 const BADGE = "PROTOTYPE – NOT FOR PUBLICATION";
@@ -75,11 +75,9 @@ ${row("Rationale", esc(b.rationale))}
 </table></div>`;
 }
 
-/** Fetch the image and convert it to PNG (browsers only accept image/png on the clipboard). */
+/** Fetch the image through our API and convert it to PNG (browsers only accept image/png on the clipboard). */
 async function imageAsPng(img: ImageInfo): Promise<Blob> {
-  const res = await fetch(imageUrl(img.url), { mode: "cors" });
-  if (!res.ok) throw new Error(`image ${res.status}`);
-  const bitmap = await createImageBitmap(await res.blob());
+  const bitmap = await createImageBitmap(await getImageBlob(img.id));
   const canvas = document.createElement("canvas");
   canvas.width = bitmap.width;
   canvas.height = bitmap.height;
@@ -135,8 +133,23 @@ function download(dataUrl: string, filename: string) {
   a.click();
 }
 
-/** Render the composed ad preview node to a 1080-px-wide PNG and download it. */
+/**
+ * Render the composed ad preview node to a 1080-px-wide PNG and download it.
+ * The preview's <img> points at R2, which the renderer can't read without bucket CORS,
+ * so it is swapped for a copy fetched through our API while rendering.
+ */
 export async function downloadComposedAd(node: HTMLElement, item: Item): Promise<void> {
-  const dataUrl = await toPng(node, { pixelRatio: 1080 / node.offsetWidth, cacheBust: true });
-  download(dataUrl, `${item.content_id}_piece${item.piece}_ad.png`);
+  const img = pickImage(item);
+  const el = node.querySelector("img");
+  const original = el?.getAttribute("src") ?? null;
+  try {
+    if (img && el) {
+      el.setAttribute("src", await blobToDataUrl(await getImageBlob(img.id)));
+      await el.decode().catch(() => undefined);
+    }
+    const dataUrl = await toPng(node, { pixelRatio: 1080 / node.offsetWidth });
+    download(dataUrl, `${item.content_id}_piece${item.piece}_ad.png`);
+  } finally {
+    if (el && original !== null) el.setAttribute("src", original);
+  }
 }

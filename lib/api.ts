@@ -29,6 +29,16 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return (await res.json()) as T;
 }
 
+/** Image bytes through our API (logged in, CORS already allowed), for copy / download. */
+export async function getImageBlob(imageId: string): Promise<Blob> {
+  const res = await fetch(`${API_BASE}/api/images/${encodeURIComponent(imageId)}/file`, {
+    headers: { Authorization: `Bearer ${token()}` },
+  });
+  if (res.status === 401) logout();
+  if (!res.ok) throw new Error(`image ${res.status}`);
+  return res.blob();
+}
+
 export const getHealth = () => request<Health>("/api/health");
 export const getItem = (id: string) => request<Item>(`/api/items/${id}`);
 // Local store: "/images/…" served by the API. R2: an absolute (presigned or public) URL.
