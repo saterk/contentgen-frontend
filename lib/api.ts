@@ -31,7 +31,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const getHealth = () => request<Health>("/api/health");
 export const getItem = (id: string) => request<Item>(`/api/items/${id}`);
-export const imageUrl = (url: string) => `${API_BASE}${url}`;
+// Local store: "/images/…" served by the API. R2: an absolute (presigned or public) URL.
+export const imageUrl = (url: string) => (/^https?:\/\//.test(url) ? url : `${API_BASE}${url}`);
 
 export type StreamHandlers = {
   onText: (text: string) => void;

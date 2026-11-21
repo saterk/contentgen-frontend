@@ -17,10 +17,9 @@ export function AdPreview({
   return (
     <div className="@container relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-gradient-to-br from-amber-200 via-rose-200 to-zinc-300 text-white">
       {image ? (
-        // crossOrigin lets the copy / download helpers read the pixels
+        // no crossOrigin: the image always displays; copy / download fetch it separately (needs bucket CORS)
         <img
           src={imageUrl(image.url)}
-          crossOrigin="anonymous"
           alt={brief.visual.subject}
           className="absolute inset-0 h-full w-full object-cover"
         />
