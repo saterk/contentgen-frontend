@@ -4,7 +4,7 @@
 import { useState } from "react";
 
 /**
- * Company logo from /public/aia-logo.svg (use the official file from the brand team).
+ * Company logo from /public/aia-logo.png (the current wordmark from aia.co.th).
  * Until that file is there, a plain text label is shown instead of a broken image.
  */
 export function Logo({ className = "h-8" }: { className?: string }) {
@@ -12,7 +12,7 @@ export function Logo({ className = "h-8" }: { className?: string }) {
   if (missing) {
     return <span className="text-base font-bold tracking-tight text-red-600">AIA Thailand</span>;
   }
-  return <img src="/aia-logo.svg" alt="AIA" className={`${className} w-auto`} onError={() => setMissing(true)} />;
+  return <img src="/aia-logo.png" alt="AIA" className={`${className} w-auto`} onError={() => setMissing(true)} />;
 }
 
 /** Logo plus app name and department, used in the header and on the login page. */
