@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getHealth, getItem, streamChat } from "@/lib/api";
 import { logout, useSession } from "@/lib/auth";
+import { Brand } from "./Logo";
 import type { ChatMessage, Health, Item, Mode, PieceState, Run, XEvent } from "@/lib/types";
 import { ChatPanel } from "./ChatPanel";
 import { ItemDrawer } from "./ItemDrawer";
@@ -173,7 +174,9 @@ export default function ContentCreator() {
   return (
     <div className="flex h-dvh flex-col bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
       <header className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-zinc-200 bg-white px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900">
-        <h1 className="text-lg font-semibold tracking-tight">Content Creator</h1>
+        <h1>
+          <Brand />
+        </h1>
         <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-900">Prototype – not for publication</span>
         <HealthDot health={health} error={healthError} />
         <div className="ml-auto flex items-center gap-3 text-sm">

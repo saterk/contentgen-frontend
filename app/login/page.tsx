@@ -1,5 +1,6 @@
 "use client";
 
+import { Brand } from "@/components/Logo";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { login, useSession } from "@/lib/auth";
@@ -38,8 +39,10 @@ export default function LoginPage() {
         className="w-full max-w-sm space-y-4 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
       >
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Content Creator</h1>
-          <p className="mt-1 text-sm text-zinc-500">Sign in to continue</p>
+          <h1>
+            <Brand size="lg" />
+          </h1>
+          <p className="mt-4 text-sm text-zinc-500">Sign in to continue</p>
         </div>
 
         <label className="block text-sm">

@@ -19,8 +19,8 @@ const notoThai = Noto_Sans_Thai({
 });
 
 export const metadata: Metadata = {
-  title: "Content Creator",
-  description: "Module 3 – AI Content Creator prototype",
+  title: "Content Creator · AIA Thailand",
+  description: "AI content creator prototype for the Marketing Department, AIA Thailand",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
